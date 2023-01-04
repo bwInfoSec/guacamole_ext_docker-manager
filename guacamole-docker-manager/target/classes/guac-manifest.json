@@ -1,0 +1,12 @@
+{
+
+    "guacamoleVersion" : "1.4.0",
+
+    "name"      : "Tutorial Listener Extension",
+    "namespace" : "guac-listener-tutorial",
+
+    "listeners" : [
+        "bwinfosec.de.guacamole.DockerManagerListener"
+    ]
+
+}

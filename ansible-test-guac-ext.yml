@@ -1,0 +1,15 @@
+---
+- name: Deploy Guacamole
+  hosts: urz_isms_guacamole_dev
+  become: true
+  gather_facts: false
+  tasks:
+    - name: upload jar
+      ansible.builtin.copy:
+        src: /home/mxs/bwinfosec/gitlab/guacamole_ext_docker-manager/guacamole-docker-manager/target/guacamole-docker-manager-1.0-SNAPSHOT-jar-with-dependencies-and-exclude-classes.jar
+        dest: /etc/guacamole/extensions/guacamole-docker-manager.jar
+
+    - name: restart tomcat
+      ansible.builtin.service:
+        name: tomcat9
+        state: restarted
