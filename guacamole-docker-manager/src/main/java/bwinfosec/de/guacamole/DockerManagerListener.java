@@ -43,21 +43,19 @@ public class DockerManagerListener implements Listener {
         String password;
         String hiscout_url;
 
-        createDockerContainerThreaded(final String hostname, final String port, final String identifier, final String username, final String password) {
-            this.hostname = "10.10.11.70:2376";
+        createDockerContainerThreaded(final String hostname, final String port, final String username, final String password) {
+            this.hostname = hostname;
             this.port = port;
-            this.identifier = identifier;
             this.username = username;
             this.password = password;
-            this.hiscout_url = "www.hiscout.url";
+            this.hiscout_url = "https://hiscout-test.ismsdev.realm.bwinfosec.uni-heidelberg.de/"; // CHANGEME
         }
 
         public void run() {
 
             DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                    //.withDockerHost(String.format("tcp://%s", hostname))
-                    .withDockerHost("tcp://10.10.11.70:2376")
-                    .withDockerCertPath("/home/debian/.docker/certs") //https://stackoverflow.com/questions/40134311/how-to-connect-to-a-docker-daemon-listening-to-ssl-tls-connections-over-hostvmi
+                    .withDockerHost(String.format("tcp://%s:2376", hostname))
+                    .withDockerCertPath("/etc/guacamole/certs") //https://stackoverflow.com/questions/40134311/how-to-connect-to-a-docker-daemon-listening-to-ssl-tls-connections-over-hostvmi
                     .withDockerTlsVerify(true)
                     .build();
 
@@ -77,7 +75,7 @@ public class DockerManagerListener implements Listener {
 
             for (Container container : containers) {
                 List<String> names = Arrays.asList(container.getNames());
-                if (names.contains(String.format("/term_%s_%s", identifier, username))) { // WHY THE FUCK /
+                if (names.contains(String.format("/term_%s", username))) { // WHY THE FUCK /
                     containerExists = true;
                 }
             }
@@ -89,13 +87,13 @@ public class DockerManagerListener implements Listener {
                 portBindings.bind(userRDP, Ports.Binding.bindPort(Integer.parseInt(port)));
 
                 CreateContainerResponse container = dockerClient
-                        .createContainerCmd("registry-gitlab.urz.uni-heidelberg.de/it-sec/molecule-docker-images/testing/ubuntu:rdesktop-ubuntu-kde")
+                        .createContainerCmd("registry-gitlab.urz.uni-heidelberg.de/it-sec/molecule-docker-images/production/ubuntu:rdesktop-ubuntu-kde")
                         .withHostConfig(new HostConfig()
                                 .withPortBindings(portBindings))
                         .withEnv(String.format("GUACAMOLE_USERNAME=%s", username),
                                 String.format("GUACAMOLE_PASSWORD=%s", password),
                                 String.format("HISCOUT_URL=%s", hiscout_url))
-                        .withName(String.format("term_%s_%s", identifier, username))
+                        .withName(String.format("term_%s", username))
                         .exec();
 
                 dockerClient.startContainerCmd(container.getId()).exec();
@@ -123,7 +121,7 @@ public class DockerManagerListener implements Listener {
                 logger.info("STARTING THREAD WITH: {}",
                     config.getParameters().toString());
     
-                Thread dockerCreateThread = new Thread(new createDockerContainerThreaded(hostname, port, identifier, username, password));
+                Thread dockerCreateThread = new Thread(new createDockerContainerThreaded(hostname, port, username, password));
                 dockerCreateThread.start();
             }
 
