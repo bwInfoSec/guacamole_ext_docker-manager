@@ -1,5 +1,7 @@
 # Guacamole Docker Manager
 
+[![Java CI with Maven](https://github.com/bwInfoSec/guacamole_ext_docker-manager/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/bwInfoSec/guacamole_ext_docker-manager/actions/workflows/maven.yml)
+
 A Guacamole Extention, which listens for authentications and provides docker containers on demand.
 
 ## Getting Started
