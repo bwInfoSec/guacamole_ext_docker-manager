@@ -77,8 +77,6 @@ public class DockerManagerListener implements Listener {
 
     private class createDockerContainerThreaded implements Runnable {
 
-        private final Logger logger_thread = LoggerFactory.getLogger(createDockerContainerThreaded.class);
-
         private final String hostname;
         private final String port;
         private final String username;
@@ -143,7 +141,6 @@ public class DockerManagerListener implements Listener {
                 portBindings.bind(userRDP, Ports.Binding.bindPort(Integer.parseInt(this.port)));
 
                 // Get the additional environment variables by splitting
-                logger_thread.info("Set additional environment variables");
                 List<String> envs = new ArrayList<String>();
                 String[] additionalEnvArray = this.additionalEnv.split(",");
                 envs.add(String.format("GUACAMOLE_USERNAME=%s", this.username));
@@ -152,7 +149,6 @@ public class DockerManagerListener implements Listener {
                     envs.add(env);
                 }
 
-                logger_thread.info("Start container");
                 CreateContainerResponse container = dockerClient
                         .createContainerCmd(this.image)
                         .withHostConfig(new HostConfig()
