@@ -30,6 +30,11 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: Publish to GitHub Packages Apache Maven
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
     - name: Extract Maven project version
       run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
       id: project
@@ -54,8 +59,3 @@ jobs:
         asset_path: '${{ github.workspace }}/target/guacamole-docker-manager-${{ steps.project.outputs.version }}.jar'
         asset_name: guacamole-docker-manager.jar
         asset_content_type: application/jar
-
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
