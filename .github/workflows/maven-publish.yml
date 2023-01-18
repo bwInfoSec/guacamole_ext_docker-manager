@@ -28,7 +28,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package assembly:single --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
@@ -50,7 +50,7 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: upload darwin artifact
+    - name: Upload normal JAR artifact
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -58,4 +58,14 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: '${{ github.workspace }}/target/guacamole-docker-manager-${{ steps.project.outputs.version }}.jar'
         asset_name: guacamole-docker-manager.jar
+        asset_content_type: application/jar
+
+    - name: Upload JAR with dependency artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: '${{ github.workspace }}/target/guacamole-docker-manager-${{ steps.project.outputs.version }}-jar-with-dependencies-and-exclude-classes.jar'
+        asset_name: guacamole-docker-manager-jar-with-dependencies-and-exclude-classes.jar
         asset_content_type: application/jar
