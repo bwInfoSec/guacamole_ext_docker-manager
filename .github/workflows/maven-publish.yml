@@ -47,7 +47,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: '${{ github.workspace }}/target/guacamole-docker-manager-*.jar'
+        asset_path: './target/guacamole-docker-manager-*.jar'
         asset_name: guacamole-docker-manager.jar
         asset_content_type: application/jar
 
