@@ -5,7 +5,7 @@
 
   <groupId>bwinfosec.de.guacamole</groupId>
   <artifactId>guacamole-docker-manager</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.4.0</version>
 
   <name>guacamole-docker-manager</name>
   <url>https://www.bwinfosec.de</url>
