@@ -156,9 +156,9 @@ public class DockerManagerListener implements Listener {
                         .withEnv(envs)
                         .withName(String.format("term_%s", this.username))
                         .exec();
-
-                dockerClient.startContainerCmd(container.getId()).exec();
             }
+
+            dockerClient.startContainerCmd(container.getId()).exec();
         };
     }
 
@@ -193,10 +193,6 @@ public class DockerManagerListener implements Listener {
                         environment.getProperty(DOCKER_IMAGE, DEFAULT_DOCKER_IMAGE)));
                 dockerCreateThread.start();
             }
-
-            // logger.info("Successful authentication for user {}",
-            // ((AuthenticationSuccessEvent) event)
-            // .getCredentials().getPassword());
 
         }
 
