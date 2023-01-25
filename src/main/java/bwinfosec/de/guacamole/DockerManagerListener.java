@@ -157,7 +157,6 @@ public class DockerManagerListener implements Listener {
                         .withName(String.format("term_%s", this.username))
                         .exec();
             }
-
             dockerClient.startContainerCmd(container.getId()).exec();
         };
     }
